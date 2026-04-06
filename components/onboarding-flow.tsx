@@ -109,6 +109,39 @@ const timings: Array<{
   }
 ];
 
+const onboardingSteps = [
+  {
+    label: "Intro",
+    title: "Starter overview",
+    description: "See the full path from setup to your first coached session."
+  },
+  {
+    label: "Motivation",
+    title: "Capture your motivation",
+    description: "Choose the reasons that should shape your starter plan."
+  },
+  {
+    label: "Goals",
+    title: "Set your first-week focus",
+    description: "Clarify what success should look like in the MVP."
+  },
+  {
+    label: "Privacy",
+    title: "Confirm privacy",
+    description: "Review the browser-first camera and storage setup."
+  },
+  {
+    label: "Movement",
+    title: "Pick your movement lane",
+    description: "Align the library and workout recommendations with your style."
+  },
+  {
+    label: "Timing",
+    title: "Choose your start pace",
+    description: "Set the tone for how quickly you want to begin."
+  }
+] as const;
+
 function ToggleCard({
   active,
   title,
@@ -177,6 +210,10 @@ export function OnboardingFlow() {
       : [...current, value];
   }
 
+  const totalSteps = onboardingSteps.length;
+  const currentStep = onboardingSteps[step];
+  const progress = ((step + 1) / totalSteps) * 100;
+
   const canContinue = [
     true,
     selectedMotivations.length > 0,
@@ -187,7 +224,7 @@ export function OnboardingFlow() {
   ][step];
 
   function advance() {
-    if (step === 5) {
+    if (step === totalSteps - 1) {
       if (!startTiming) {
         return;
       }
@@ -207,38 +244,103 @@ export function OnboardingFlow() {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-7xl items-center px-4 py-6 sm:px-6 lg:px-8">
-      <div className="grid w-full gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <section className="panel relative overflow-hidden p-6 sm:p-8">
-          <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-br from-lime/15 via-transparent to-transparent" />
-          <div className="relative">
-            <div className="flex items-center justify-between gap-4">
-              <div>
+    <div className="mx-auto flex min-h-screen w-full max-w-5xl items-center px-4 py-6 sm:px-6 lg:px-8">
+      <section className="panel relative w-full overflow-hidden p-6 sm:p-8">
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-br from-lime/15 via-transparent to-transparent" />
+        <div className="relative">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="max-w-3xl">
                 <p className="eyebrow">Onboarding</p>
                 <h1 className="mt-2 font-display text-4xl font-semibold sm:text-5xl">
                   Build your starter coaching loop.
                 </h1>
+                <p className="mt-3 max-w-2xl text-sm leading-6 text-mist/75">
+                  Move from setup to first workout in a short, guided flow.
+                </p>
               </div>
               <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs uppercase tracking-[0.24em] text-mist/60">
-                Step {step + 1} / 6
+                Step {step + 1} / {totalSteps}
               </div>
             </div>
 
-            <div className="mt-6 progress-track">
-              <div
-                className="progress-fill transition-all"
-                style={{ width: `${((step + 1) / 6) * 100}%` }}
-              />
+            <div className="rounded-[28px] border border-white/10 bg-black/20 p-5 sm:p-6">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em] text-mist/55">
+                    Progress
+                  </p>
+                  <h2 className="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl">
+                    {currentStep.title}
+                  </h2>
+                  <p className="mt-2 max-w-2xl text-sm leading-6 text-mist/70">
+                    {currentStep.description}
+                  </p>
+                </div>
+                <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white">
+                  {Math.round(progress)}% complete
+                </div>
+              </div>
+
+              <div className="mt-5 progress-track h-3">
+                <div
+                  className="progress-fill transition-all duration-500"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+
+              <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
+                {onboardingSteps.map((progressStep, index) => {
+                  const isCurrent = index === step;
+                  const isComplete = index < step;
+                  const isActive = isCurrent || isComplete;
+
+                  return (
+                    <div key={progressStep.label} className="space-y-2">
+                      <div
+                        className={`h-1 rounded-full transition ${
+                          isActive ? "bg-lime" : "bg-white/[0.08]"
+                        }`}
+                      />
+                      <div>
+                        <p
+                          className={`text-[10px] font-semibold uppercase tracking-[0.24em] ${
+                            isActive ? "text-lime" : "text-mist/40"
+                          }`}
+                        >
+                          0{index + 1}
+                        </p>
+                        <p
+                          className={`mt-1 text-sm ${
+                            isCurrent
+                              ? "text-white"
+                              : isComplete
+                                ? "text-mist/80"
+                                : "text-mist/50"
+                          }`}
+                        >
+                          {progressStep.label}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
             {step === 0 ? (
-              <div className="mt-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+              <div className="mt-4 grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
                 <div className="panel-subtle flex min-h-[340px] flex-col justify-between overflow-hidden p-6">
                   <div>
                     <p className="chip">Your private AI form coach</p>
                     <h2 className="mt-5 font-display text-4xl font-semibold leading-none">
                       Start training with cues you can act on immediately.
                     </h2>
+                    <p className="mt-4 max-w-xl text-sm leading-6 text-mist/75">
+                      Answer a few quick prompts, confirm privacy, and head
+                      straight into the exercise library or a first guided
+                      session.
+                    </p>
                   </div>
                   <div className="rounded-[26px] border border-lime/20 bg-black/25 p-5">
                     <p className="text-sm leading-6 text-mist/75">
@@ -249,16 +351,26 @@ export function OnboardingFlow() {
                   </div>
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3">
                   {[
-                    "Motivation signals",
-                    "Training goals",
-                    "Privacy consent",
-                    "Preferred movement lane",
-                    "Start timing"
+                    {
+                      title: "Takes about a minute",
+                      description:
+                        "Six short steps, simple taps, and no account setup before the demo."
+                    },
+                    {
+                      title: "Private by default",
+                      description:
+                        "Camera analysis stays in the browser and only lightweight choices are saved locally."
+                    },
+                    {
+                      title: "Immediate next step",
+                      description:
+                        "Finish here and go straight to the library or your first camera-guided workout."
+                    }
                   ].map((item, index) => (
                     <div
-                      key={item}
+                      key={item.title}
                       className={`rounded-[24px] border p-5 ${
                         index === 1
                           ? "border-lime/30 bg-lime/[0.08]"
@@ -269,7 +381,10 @@ export function OnboardingFlow() {
                         0{index + 1}
                       </p>
                       <p className="mt-3 font-display text-2xl font-semibold text-white">
-                        {item}
+                        {item.title}
+                      </p>
+                      <p className="mt-2 text-sm leading-6 text-mist/70">
+                        {item.description}
                       </p>
                     </div>
                   ))}
@@ -456,76 +571,12 @@ export function OnboardingFlow() {
                 disabled={!canContinue}
                 className="button-primary disabled:cursor-not-allowed disabled:opacity-40"
               >
-                {step === 5 ? "Start MVP" : "Next"}
+                {step === totalSteps - 1 ? "Start MVP" : "Next"}
               </button>
             </div>
           </div>
-        </section>
-
-        <aside className="panel flex flex-col gap-4 p-6">
-          <div>
-            <p className="eyebrow">Wireframe intent</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold">
-              Conversion-first onboarding.
-            </h2>
-            <p className="mt-3 text-sm leading-6 text-mist/75">
-              This MVP keeps the flow short and high-signal: motivations, goals,
-              privacy, movement preferences, and start timing before the user sees
-              the exercise library.
-            </p>
-          </div>
-
-          <div className="grid gap-3">
-            {[
-              {
-                label: "Motivations",
-                value:
-                  selectedMotivations.length > 0
-                    ? `${selectedMotivations.length} selected`
-                    : "Waiting"
-              },
-              {
-                label: "Goals",
-                value: selectedGoals.length > 0 ? `${selectedGoals.length} selected` : "Waiting"
-              },
-              {
-                label: "Privacy",
-                value: privacyAccepted ? "Accepted" : "Pending"
-              },
-              {
-                label: "Movement lane",
-                value:
-                  selectedMovements.length > 0
-                    ? `${selectedMovements.length} chosen`
-                    : "Waiting"
-              },
-              {
-                label: "Start timing",
-                value: startTiming ? startTiming.replace("-", " ") : "Waiting"
-              }
-            ].map((item) => (
-              <div key={item.label} className="panel-subtle p-4">
-                <p className="text-xs uppercase tracking-[0.24em] text-mist/55">
-                  {item.label}
-                </p>
-                <p className="mt-3 font-display text-2xl font-semibold text-white">
-                  {item.value}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="rounded-[24px] border border-orange-400/20 bg-orange-400/[0.08] p-5">
-            <p className="text-xs uppercase tracking-[0.24em] text-orange-200/70">
-              Demo note
-            </p>
-            <p className="mt-3 text-sm leading-6 text-orange-100/80">
-              For the cleanest squat and lunge cues, angle the body slightly
-              side-on so hip depth and knee travel are easier to read on camera.
-            </p>
-          </div>
-        </aside>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

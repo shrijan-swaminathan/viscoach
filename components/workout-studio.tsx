@@ -21,6 +21,16 @@ const WASM_ROOT = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MEDIAP
 const MODEL_URL =
   "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task";
 
+function closePoseDetector(detector: PoseLandmarkerType | null) {
+  if (!detector) {
+    return;
+  }
+
+  try {
+    detector.close();
+  } catch {}
+}
+
 export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
   const router = useRouter();
   const { saveSession } = useAppState();
@@ -59,6 +69,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
 
   useEffect(() => {
     let cancelled = false;
+    let pendingDetector: PoseLandmarkerType | null = null;
 
     async function loadPoseModel() {
       try {
@@ -74,16 +85,26 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
           minPosePresenceConfidence: 0.55,
           minTrackingConfidence: 0.55
         });
+        pendingDetector = detector;
 
         if (cancelled) {
-          detector.close();
+          closePoseDetector(pendingDetector);
+          pendingDetector = null;
           return;
         }
 
         detectorRef.current = detector;
+        pendingDetector = null;
         setModelStatus("ready");
         setStatusMessage("Pose model ready. Enable your camera to start.");
       } catch (error) {
+        closePoseDetector(pendingDetector);
+        pendingDetector = null;
+
+        if (cancelled) {
+          return;
+        }
+
         console.error(error);
         setModelStatus("error");
         setStatusMessage(
@@ -97,8 +118,10 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     return () => {
       cancelled = true;
       stopCamera(false);
-      detectorRef.current?.close();
+      closePoseDetector(detectorRef.current);
       detectorRef.current = null;
+      closePoseDetector(pendingDetector);
+      pendingDetector = null;
     };
   }, []);
 
