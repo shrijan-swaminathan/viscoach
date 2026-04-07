@@ -21,12 +21,12 @@ export default function ProgressPage() {
         <div className="panel p-6 sm:p-8">
           <p className="eyebrow">Progress</p>
           <h1 className="mt-3 font-display text-5xl font-semibold leading-none">
-            Session metrics that feel real enough for the demo.
+            Session metrics that show how your form is trending.
           </h1>
           <p className="mt-4 max-w-3xl text-sm leading-6 text-mist/75">
             Each saved workout stores reps, average form score, duration, and the
-            most common correction. It is intentionally local, but it still gives
-            the product a believable feedback loop.
+            most common correction. Everything stays local to this device while
+            still giving you a clear feedback loop.
           </p>
         </div>
 
@@ -133,8 +133,8 @@ export default function ProgressPage() {
             Keep the loop tight.
           </h2>
           <p className="mt-3 text-sm leading-6 text-mist/75">
-            For a strong class demo, run onboarding once, complete a short camera
-            session, then return here to show the saved summary.
+            Complete another workout, then come back here to compare reps, form
+            score, and recurring corrections over time.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link href="/coach/library" className="button-primary">

@@ -14,7 +14,7 @@ export default function ExerciseWorkoutPage() {
       <div className="panel p-8">
         <p className="eyebrow">Workout</p>
         <h1 className="mt-3 font-display text-4xl font-semibold">
-          That exercise is not part of the MVP library.
+          That exercise is not part of the current library.
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-mist/75">
           Use squat, push-up, or lunge to stay inside the supported coaching flow.

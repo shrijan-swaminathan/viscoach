@@ -21,7 +21,7 @@ export default function RootPage() {
       <div className="panel max-w-lg p-8 text-center">
         <p className="eyebrow">VisCoach</p>
         <h1 className="mt-3 font-display text-4xl font-semibold">
-          Preparing the MVP flow.
+          Preparing your coaching workspace.
         </h1>
       </div>
     </div>

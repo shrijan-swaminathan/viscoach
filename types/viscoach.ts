@@ -41,12 +41,21 @@ export interface SessionSummary {
   cueCounts: Record<string, number>;
 }
 
+export interface ExerciseTutorialVideo {
+  title: string;
+  creator: string;
+  description: string;
+  embedUrl: string;
+  watchUrl: string;
+}
+
 export interface ExerciseDefinition {
   id: ExerciseId;
   name: string;
   tagline: string;
   summary: string;
   focus: string[];
+  tutorialVideo: ExerciseTutorialVideo;
   coachingHighlights: string[];
   heroTone: string;
   surfaceTone: string;

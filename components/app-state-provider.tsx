@@ -34,7 +34,7 @@ interface AppStateValue {
     profile: Omit<OnboardingProfile, "completedAt">
   ) => void;
   saveSession: (session: SessionSummary) => void;
-  resetDemo: () => void;
+  resetData: () => void;
 }
 
 const AppStateContext = createContext<AppStateValue | null>(null);
@@ -83,7 +83,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     saveSession(session) {
       setSessions((currentSessions) => [session, ...currentSessions].slice(0, 32));
     },
-    resetDemo() {
+    resetData() {
       removeStoredValue(STORAGE_KEYS.profile);
       removeStoredValue(STORAGE_KEYS.sessions);
       setProfile(null);

@@ -39,7 +39,9 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
   const detectorRef = useRef<PoseLandmarkerType | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const animationRef = useRef<number | null>(null);
-  const cameraStatusRef = useRef<"idle" | "starting" | "live" | "stopped">("idle");
+  const cameraStatusRef = useRef<
+    "idle" | "starting" | "preview" | "countdown" | "live" | "stopped"
+  >("idle");
   const phaseRef = useRef<FrameAnalysis["phase"]>("setup");
   const lastHudUpdateRef = useRef(0);
   const scoreHistoryRef = useRef<number[]>([]);
@@ -53,7 +55,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     "loading"
   );
   const [cameraStatus, setCameraStatus] = useState<
-    "idle" | "starting" | "live" | "stopped"
+    "idle" | "starting" | "preview" | "countdown" | "live" | "stopped"
   >("idle");
   const [statusMessage, setStatusMessage] = useState(
     "Loading pose model for live camera coaching."
@@ -66,6 +68,8 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
   const [repCount, setRepCount] = useState(0);
   const [formScore, setFormScore] = useState(0);
   const [durationSeconds, setDurationSeconds] = useState(0);
+  const [isTutorialVisible, setIsTutorialVisible] = useState(true);
+  const [countdownValue, setCountdownValue] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -143,7 +147,31 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     return () => window.clearInterval(timer);
   }, [cameraStatus]);
 
-  async function startCamera() {
+  useEffect(() => {
+    setIsTutorialVisible(true);
+    setCountdownValue(null);
+  }, [exercise.id]);
+
+  useEffect(() => {
+    if (cameraStatus !== "countdown" || countdownValue === null) {
+      return;
+    }
+
+    if (countdownValue === 0) {
+      beginWorkout();
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      setCountdownValue((currentValue) =>
+        currentValue === null ? null : currentValue - 1
+      );
+    }, 1000);
+
+    return () => window.clearTimeout(timeout);
+  }, [cameraStatus, countdownValue]);
+
+  async function enableCamera() {
     if (!videoRef.current) {
       return;
     }
@@ -172,11 +200,13 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
       await videoRef.current.play();
 
       resetSessionState();
-      sessionStartedAtRef.current = Date.now();
-      setCameraStatus("live");
-      cameraStatusRef.current = "live";
-      setStatusMessage("Camera live. Hold the pose until landmarks lock.");
-      runInferenceLoop();
+      setCameraStatus("preview");
+      cameraStatusRef.current = "preview";
+      setStatusMessage("Webcam ready. Start the workout when you are in position.");
+      setPrimaryCue("Line up your frame.");
+      setSecondaryCue(
+        "Use the live preview to get your full body visible before the countdown starts."
+      );
     } catch (error) {
       console.error(error);
       setCameraStatus("idle");
@@ -193,6 +223,8 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     repCountRef.current = 0;
     lastVideoTimeRef.current = -1;
     hasSavedSessionRef.current = false;
+    sessionStartedAtRef.current = null;
+    setCountdownValue(null);
     setRepCount(0);
     setFormScore(0);
     setDurationSeconds(0);
@@ -220,6 +252,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     }
 
     stopTracks();
+    setCountdownValue(null);
     setCameraStatus("stopped");
     cameraStatusRef.current = "stopped";
 
@@ -232,6 +265,29 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     if (saveWorkout) {
       persistSession();
     }
+  }
+
+  function startWorkoutCountdown() {
+    if (cameraStatus !== "preview") {
+      return;
+    }
+
+    clearCanvas();
+    setCountdownValue(3);
+    setCameraStatus("countdown");
+    cameraStatusRef.current = "countdown";
+    setStatusMessage("Get in position. Workout starts in 3.");
+    setPrimaryCue("Get ready.");
+    setSecondaryCue("Hold your setup. Tracking begins as soon as the countdown ends.");
+  }
+
+  function beginWorkout() {
+    setCountdownValue(null);
+    sessionStartedAtRef.current = Date.now();
+    setCameraStatus("live");
+    cameraStatusRef.current = "live";
+    setStatusMessage("Workout live. Hold the pose until landmarks lock.");
+    runInferenceLoop();
   }
 
   function clearCanvas() {
@@ -405,7 +461,17 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     });
   }
 
-  const canStart = modelStatus === "ready" && cameraStatus !== "starting" && cameraStatus !== "live";
+  const canEnableCamera =
+    !isTutorialVisible &&
+    modelStatus === "ready" &&
+    (cameraStatus === "idle" || cameraStatus === "stopped");
+
+  const showCameraOverlay =
+    !isTutorialVisible &&
+    (cameraStatus === "idle" ||
+      cameraStatus === "starting" ||
+      cameraStatus === "preview" ||
+      cameraStatus === "stopped");
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
@@ -418,7 +484,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
             </h1>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-mist/75">
               Use the browser camera on your Mac, keep your full body visible, and
-              let the MVP run short, rule-based coaching prompts over the pose
+              let VisCoach run short, rule-based coaching prompts over the pose
               overlay.
             </p>
           </div>
@@ -429,46 +495,147 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
 
         <div className="mt-5 overflow-hidden rounded-[28px] border border-white/10 bg-black/40">
           <div className="relative aspect-[16/10] w-full bg-[radial-gradient(circle_at_top,_rgba(201,255,67,0.12),_transparent_45%),linear-gradient(180deg,_rgba(10,17,13,0.95),_rgba(5,8,7,1))]">
-            <video
-              ref={videoRef}
-              playsInline
-              muted
-              className="h-full w-full object-cover [transform:scaleX(-1)]"
-            />
-            <canvas
-              ref={canvasRef}
-              className="pointer-events-none absolute inset-0 h-full w-full [transform:scaleX(-1)]"
-            />
-
-            {cameraStatus !== "live" ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/35">
-                <div className="panel mx-4 max-w-md p-6 text-center">
-                  <p className="eyebrow">Camera prep</p>
-                  <h2 className="mt-2 font-display text-3xl font-semibold">
-                    Enable the webcam to start the session.
-                  </h2>
-                  <p className="mt-3 text-sm leading-6 text-mist/70">
-                    For the cleanest squat and lunge cues, stand far enough back to
-                    keep ankles in frame and rotate slightly side-on.
-                  </p>
+            {isTutorialVisible ? (
+              <>
+                <iframe
+                  src={exercise.tutorialVideo.embedUrl}
+                  title={`${exercise.name} tutorial video by ${exercise.tutorialVideo.creator}`}
+                  className="absolute inset-0 h-full w-full"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/75 to-transparent">
+                  <div className="p-5 sm:p-6">
+                    <p className="eyebrow">Tutorial video</p>
+                    <h2 className="mt-2 font-display text-3xl font-semibold text-white">
+                      {exercise.tutorialVideo.title}
+                    </h2>
+                    <p className="mt-3 max-w-2xl text-sm leading-6 text-mist/75">
+                      {exercise.tutorialVideo.description}
+                    </p>
+                    <p className="mt-3 text-xs uppercase tracking-[0.24em] text-mist/50">
+                      {exercise.tutorialVideo.creator}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ) : null}
+              </>
+            ) : (
+              <>
+                <video
+                  ref={videoRef}
+                  playsInline
+                  muted
+                  className="h-full w-full object-cover [transform:scaleX(-1)]"
+                />
+                <canvas
+                  ref={canvasRef}
+                  className="pointer-events-none absolute inset-0 h-full w-full [transform:scaleX(-1)]"
+                />
+
+                {showCameraOverlay ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/35">
+                    <div className="panel mx-4 max-w-md p-6 text-center">
+                      <p className="eyebrow">
+                        {cameraStatus === "preview" ? "Preview ready" : "Camera prep"}
+                      </p>
+                      <h2 className="mt-2 font-display text-3xl font-semibold">
+                        {cameraStatus === "preview"
+                          ? "Start the workout when you are set."
+                          : "Enable the webcam to start the session."}
+                      </h2>
+                      <p className="mt-3 text-sm leading-6 text-mist/70">
+                        {cameraStatus === "preview"
+                          ? "Check your framing now so the countdown can lead straight into the first rep."
+                          : "For the cleanest squat and lunge cues, stand far enough back to keep ankles in frame and rotate slightly side-on."}
+                      </p>
+                    </div>
+                  </div>
+                ) : null}
+
+                {cameraStatus === "countdown" && countdownValue !== null ? (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                    <div className="text-center">
+                      <p className="eyebrow">Starting workout</p>
+                      <p className="mt-3 font-display text-7xl font-semibold text-white sm:text-8xl">
+                        {countdownValue}
+                      </p>
+                      <p className="mt-3 text-sm leading-6 text-mist/70">
+                        Get into position and hold steady.
+                      </p>
+                    </div>
+                  </div>
+                ) : null}
+              </>
+            )}
           </div>
 
           <div className="flex flex-wrap gap-3 border-t border-white/10 px-4 py-4">
-            <button
-              type="button"
-              onClick={startCamera}
-              disabled={!canStart}
-              className="button-primary disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {cameraStatus === "live"
-                ? "Camera live"
-                : cameraStatus === "starting"
-                  ? "Starting camera"
-                  : "Enable camera"}
-            </button>
+            {isTutorialVisible ? (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setIsTutorialVisible(false)}
+                  className="button-primary"
+                >
+                  I&apos;m Ready
+                </button>
+                <a
+                  href={exercise.tutorialVideo.watchUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button-secondary"
+                >
+                  Open in YouTube
+                </a>
+              </>
+            ) : (
+              <>
+                {(cameraStatus === "idle" ||
+                  cameraStatus === "starting" ||
+                  cameraStatus === "stopped") && (
+                  <button
+                    type="button"
+                    onClick={enableCamera}
+                    disabled={!canEnableCamera}
+                    className="button-primary disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {cameraStatus === "starting" ? "Starting webcam" : "Enable webcam"}
+                  </button>
+                )}
+
+                {cameraStatus === "preview" && (
+                  <button
+                    type="button"
+                    onClick={startWorkoutCountdown}
+                    className="button-primary"
+                  >
+                    Start workout
+                  </button>
+                )}
+
+                {cameraStatus === "countdown" && (
+                  <button
+                    type="button"
+                    disabled
+                    className="button-primary disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Starting in {countdownValue ?? 0}
+                  </button>
+                )}
+
+                {cameraStatus === "live" && (
+                  <button
+                    type="button"
+                    disabled
+                    className="button-primary disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    Workout live
+                  </button>
+                )}
+              </>
+            )}
             <button
               type="button"
               onClick={() => {
@@ -556,7 +723,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
             </p>
             <p>
               Asset dependency: MediaPipe Pose Landmarker uses a browser-fetched
-              model and WASM bundle for this MVP.
+              model and WASM bundle for live tracking.
             </p>
           </div>
         </div>

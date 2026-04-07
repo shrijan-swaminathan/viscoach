@@ -14,7 +14,7 @@ const NAV_ITEMS = [
 
 export function CoachShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { averageScore, currentStreak, isHydrated, profile, resetDemo, sessions } =
+  const { averageScore, currentStreak, isHydrated, profile, resetData, sessions } =
     useAppState();
 
   const profileSnapshot = profile
@@ -29,7 +29,7 @@ export function CoachShell({ children }: { children: React.ReactNode }) {
             <div className="space-y-4">
               <BrandMark />
               <div>
-                <p className="eyebrow">MVP Demo</p>
+                <p className="eyebrow">VisCoach</p>
                 <h1 className="font-display text-3xl font-semibold sm:text-4xl">
                   Browser-first AI form coaching.
                 </h1>
@@ -86,10 +86,10 @@ export function CoachShell({ children }: { children: React.ReactNode }) {
                 </p>
                 <button
                   type="button"
-                  onClick={resetDemo}
+                  onClick={resetData}
                   className="mt-2 text-xs font-semibold uppercase tracking-[0.2em] text-lime"
                 >
-                  Reset demo
+                  Reset data
                 </button>
               </div>
             </div>

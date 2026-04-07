@@ -68,7 +68,7 @@ const movements: Array<{
   {
     id: "bodyweight",
     title: "Bodyweight foundation",
-    description: "Keep the MVP focused on basic movement quality."
+    description: "Keep the focus on basic movement quality."
   },
   {
     id: "strength",
@@ -123,7 +123,7 @@ const onboardingSteps = [
   {
     label: "Goals",
     title: "Set your first-week focus",
-    description: "Clarify what success should look like in the MVP."
+    description: "Clarify what success should look like in your first training block."
   },
   {
     label: "Privacy",
@@ -344,9 +344,9 @@ export function OnboardingFlow() {
                   </div>
                   <div className="rounded-[26px] border border-lime/20 bg-black/25 p-5">
                     <p className="text-sm leading-6 text-mist/75">
-                      The MVP is intentionally tight: guided onboarding, three
-                      supported exercises, a live pose overlay, and short coaching
-                      prompts built for demo clarity.
+                      The experience is intentionally focused: guided onboarding,
+                      three supported exercises, a live pose overlay, and short
+                      coaching prompts you can act on quickly.
                     </p>
                   </div>
                 </div>
@@ -356,7 +356,7 @@ export function OnboardingFlow() {
                     {
                       title: "Takes about a minute",
                       description:
-                        "Six short steps, simple taps, and no account setup before the demo."
+                        "Six short steps, simple taps, and no account setup before you train."
                     },
                     {
                       title: "Private by default",
@@ -430,8 +430,8 @@ export function OnboardingFlow() {
                     Unlock the right first-week focus.
                   </h2>
                   <p className="mt-2 text-sm leading-6 text-mist/75">
-                    The original wireframe framed this as the value unlock. For
-                    the MVP, it becomes the goals screen that steers the demo.
+                    This goals screen steers your recommendations and keeps the
+                    early sessions aligned with what matters most to you.
                   </p>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -460,14 +460,14 @@ export function OnboardingFlow() {
                     We take privacy seriously.
                   </h2>
                   <p className="text-sm leading-6 text-mist/75">
-                    The demo stays browser-first. Camera access is local to your
+                    VisCoach stays browser-first. Camera access is local to your
                     session, and onboarding plus progress metrics live in
                     `localStorage` instead of a backend.
                   </p>
                   <div className="space-y-3">
                     {[
                       "Pose estimation runs on-device in the browser.",
-                      "No video is uploaded or persisted by this MVP.",
+                      "No video is uploaded or persisted by VisCoach.",
                       "Only profile choices and session summaries are saved locally."
                     ].map((item) => (
                       <div
@@ -493,7 +493,7 @@ export function OnboardingFlow() {
                     {privacyAccepted ? "Accepted" : "Tap to accept"}
                   </p>
                   <p className="mt-3 text-sm leading-6 text-mist/70">
-                    I understand that this MVP uses local browser camera access
+                    I understand that VisCoach uses local browser camera access
                     and stores only lightweight profile and session data on this
                     device.
                   </p>
@@ -539,7 +539,7 @@ export function OnboardingFlow() {
                     When are you looking to start?
                   </h2>
                   <p className="mt-2 text-sm leading-6 text-mist/75">
-                    Pick the pace that matches your first demo session.
+                    Pick the pace that matches your first training session.
                   </p>
                 </div>
                 <div className="grid gap-4">
@@ -571,7 +571,7 @@ export function OnboardingFlow() {
                 disabled={!canContinue}
                 className="button-primary disabled:cursor-not-allowed disabled:opacity-40"
               >
-                {step === totalSteps - 1 ? "Start MVP" : "Next"}
+                {step === totalSteps - 1 ? "Start training" : "Next"}
               </button>
             </div>
           </div>

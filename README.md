@@ -1,6 +1,6 @@
-# VisCoach MVP
+# VisCoach
 
-VisCoach is a browser-based workout coaching MVP built with Next.js, React, Tailwind, and MediaPipe Pose Landmarker. The current product flow focuses on the in-app demo experience only:
+VisCoach is a browser-based workout coaching app built with Next.js, React, Tailwind, and MediaPipe Pose Landmarker. The current product flow includes:
 
 - onboarding
 - dashboard
@@ -129,7 +129,7 @@ types/
 - `/coach/progress`
   - session summaries and local progress metrics
 
-## How The MVP Works
+## How It Works
 
 ### 1. Onboarding
 
@@ -145,7 +145,7 @@ This data is saved locally through the shared app state provider.
 
 ### 2. Exercise Library
 
-The library is intentionally small for demo reliability. Each exercise has:
+The library currently supports three core movements. Each exercise has:
 
 - a name
 - a short summary
@@ -166,7 +166,7 @@ The workout page:
 
 ### 4. Rule-Based Coaching
 
-The MVP does not attempt full biomechanics analysis. It uses simple heuristics from `lib/pose-analysis.ts`:
+The app does not attempt full biomechanics analysis. It uses simple heuristics from `lib/pose-analysis.ts`:
 
 - squat:
   - hip depth
@@ -192,7 +192,7 @@ These summaries are shown on the progress page and reused for dashboard metrics.
 
 ## Local Storage
 
-This MVP uses browser `localStorage` keys defined in `lib/storage.ts`:
+This app uses browser `localStorage` keys defined in `lib/storage.ts`:
 
 - `viscoach.profile`
 - `viscoach.sessions`
@@ -201,9 +201,9 @@ This means:
 
 - data is browser-specific
 - data is device-specific
-- clearing browser storage resets the demo
+- clearing browser storage resets locally saved data
 
-There is also a `Reset demo` action in the app shell that clears saved profile and session data.
+There is also a `Reset data` action in the app shell that clears saved profile and session data.
 
 ## MediaPipe Notes
 
@@ -329,7 +329,7 @@ Then manually verify:
 
 ## Future Improvements
 
-Likely next steps if the team continues this MVP:
+Potential next steps for the product:
 
 - add a camera selector with `enumerateDevices()`
 - support more robust exercise-specific tracking requirements

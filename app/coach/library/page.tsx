@@ -14,12 +14,12 @@ export default function LibraryPage() {
         <div className="mt-4 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <h1 className="font-display text-5xl font-semibold leading-none">
-              Pick a movement and start the demo loop.
+              Pick a movement and start training.
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-6 text-mist/75">
-              The MVP keeps the supported set intentionally small: squat, push-up,
-              and lunge. That matches the wireframe’s exercise-library idea without
-              overextending the pose-estimation logic.
+              VisCoach currently supports squat, push-up, and lunge. That focused
+              set keeps the coaching cues consistent and the tracking experience
+              dependable.
             </p>
           </div>
           <div className="rounded-[24px] border border-white/10 bg-white/[0.03] px-5 py-4 text-sm text-mist/75">

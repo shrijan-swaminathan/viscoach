@@ -43,9 +43,8 @@ export default function DashboardPage() {
             Ready for your next form check.
           </h1>
           <p className="mt-4 max-w-2xl text-sm leading-6 text-mist/75">
-            This screen translates the wireframe into a web MVP dashboard: it keeps
-            the user oriented, recommends the next session, and surfaces local
-            progress without requiring a backend.
+            This dashboard keeps you oriented, recommends the next session, and
+            surfaces local progress without requiring a backend.
           </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -89,7 +88,7 @@ export default function DashboardPage() {
               </h2>
               <p className="mt-3 text-sm leading-6 text-mist/75">
                 {recommendedExercise?.summary ??
-                  "Use the starter squat flow to unlock the MVP coaching loop."}
+                  "Start with the squat flow to build confidence and sharpen your form."}
               </p>
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
@@ -148,8 +147,8 @@ export default function DashboardPage() {
             {mostCommonCorrection.replaceAll("-", " ")}
           </h2>
           <p className="mt-3 text-sm leading-6 text-mist/75">
-            This gives the progress side of the MVP a reusable story even before
-            there is any server-backed analytics.
+            This surfaces the pattern that shows up most often across your saved
+            sessions, even while progress stays device-local.
           </p>
         </div>
 
