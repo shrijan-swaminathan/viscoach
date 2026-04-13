@@ -34,6 +34,7 @@ function closePoseDetector(detector: PoseLandmarkerType | null) {
 export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
   const router = useRouter();
   const { saveSession } = useAppState();
+  const cameraFrameRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const detectorRef = useRef<PoseLandmarkerType | null>(null);
@@ -69,6 +70,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
   const [formScore, setFormScore] = useState(0);
   const [durationSeconds, setDurationSeconds] = useState(0);
   const [isTutorialVisible, setIsTutorialVisible] = useState(true);
+  const [isCameraFullscreen, setIsCameraFullscreen] = useState(false);
   const [countdownValue, setCountdownValue] = useState<number | null>(null);
 
   useEffect(() => {
@@ -151,6 +153,23 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     setIsTutorialVisible(true);
     setCountdownValue(null);
   }, [exercise.id]);
+
+  useEffect(() => {
+    function handleFullscreenChange() {
+      setIsCameraFullscreen(
+        Boolean(
+          cameraFrameRef.current &&
+            document.fullscreenElement === cameraFrameRef.current
+        )
+      );
+    }
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (cameraStatus !== "countdown" || countdownValue === null) {
@@ -288,6 +307,46 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     cameraStatusRef.current = "live";
     setStatusMessage("Workout live. Hold the pose until landmarks lock.");
     runInferenceLoop();
+  }
+
+  async function exitCameraFullscreen() {
+    if (
+      cameraFrameRef.current &&
+      document.fullscreenElement === cameraFrameRef.current &&
+      document.exitFullscreen
+    ) {
+      await document.exitFullscreen();
+    }
+  }
+
+  async function toggleCameraFullscreen() {
+    const cameraFrame = cameraFrameRef.current;
+    if (!cameraFrame) {
+      return;
+    }
+
+    try {
+      if (document.fullscreenElement === cameraFrame) {
+        await exitCameraFullscreen();
+        return;
+      }
+
+      if (!document.fullscreenEnabled || !cameraFrame.requestFullscreen) {
+        setStatusMessage("Fullscreen camera is not available in this browser.");
+        return;
+      }
+
+      await cameraFrame.requestFullscreen();
+    } catch (error) {
+      console.error(error);
+      setStatusMessage("Fullscreen camera could not start. Try again from the camera controls.");
+    }
+  }
+
+  async function endAndSaveSession() {
+    await exitCameraFullscreen();
+    stopCamera(true);
+    router.push("/coach/progress");
   }
 
   function clearCanvas() {
@@ -472,6 +531,12 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
       cameraStatus === "starting" ||
       cameraStatus === "preview" ||
       cameraStatus === "stopped");
+  const fullscreenMetrics = [
+    { label: "Reps", value: `${repCount}` },
+    { label: "Form", value: formScore ? `${formScore}%` : "--" },
+    { label: "Time", value: durationSeconds ? `${durationSeconds}s` : "--" },
+    { label: "Phase", value: phase }
+  ];
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
@@ -493,8 +558,19 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
           </div>
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-lg border border-white/10 bg-black/40">
-          <div className="relative aspect-[16/10] w-full bg-black">
+        <div
+          ref={cameraFrameRef}
+          className={`overflow-hidden bg-black/40 ${
+            isCameraFullscreen
+              ? "flex h-screen w-screen flex-col rounded-none border-0 bg-black"
+              : "mt-5 rounded-lg border border-white/10"
+          }`}
+        >
+          <div
+            className={`relative w-full bg-black ${
+              isCameraFullscreen ? "min-h-0 flex-1" : "aspect-[16/10]"
+            }`}
+          >
             {isTutorialVisible ? (
               <>
                 <iframe
@@ -533,6 +609,38 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
                   ref={canvasRef}
                   className="pointer-events-none absolute inset-0 h-full w-full [transform:scaleX(-1)]"
                 />
+
+                {isCameraFullscreen ? (
+                  <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex flex-col gap-3 sm:inset-x-4 sm:top-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="max-w-xl rounded-lg border border-white/10 bg-black/75 p-4 shadow-xl shadow-black/30">
+                      <p className="eyebrow">Coach cue</p>
+                      <h2 className="mt-2 font-display text-2xl font-semibold text-white sm:text-3xl">
+                        {primaryCue}
+                      </h2>
+                      <p className="mt-2 text-sm leading-6 text-mist/75">
+                        {secondaryCue}
+                      </p>
+                      <p className="mt-3 text-xs uppercase tracking-[0.14em] text-mist/55">
+                        {statusMessage}
+                      </p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                      {fullscreenMetrics.map((metric) => (
+                        <div
+                          key={metric.label}
+                          className="min-w-[70px] rounded-lg border border-white/10 bg-black/75 px-3 py-2 text-center shadow-xl shadow-black/30"
+                        >
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-mist/55">
+                            {metric.label}
+                          </p>
+                          <p className="mt-1 font-display text-xl font-semibold text-white capitalize">
+                            {metric.value}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
 
                 {showCameraOverlay ? (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/35">
@@ -634,13 +742,20 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
                     Workout live
                   </button>
                 )}
+                <button
+                  type="button"
+                  onClick={toggleCameraFullscreen}
+                  aria-pressed={isCameraFullscreen}
+                  className="button-secondary"
+                >
+                  {isCameraFullscreen ? "Exit fullscreen" : "Fullscreen camera"}
+                </button>
               </>
             )}
             <button
               type="button"
               onClick={() => {
-                stopCamera(true);
-                router.push("/coach/progress");
+                void endAndSaveSession();
               }}
               className="button-secondary"
             >
