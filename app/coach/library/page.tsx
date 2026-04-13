@@ -22,7 +22,7 @@ export default function LibraryPage() {
               dependable.
             </p>
           </div>
-          <div className="rounded-[24px] border border-white/10 bg-white/[0.03] px-5 py-4 text-sm text-mist/75">
+          <div className="rounded-lg border border-white/10 bg-white/[0.03] px-5 py-4 text-sm text-mist/75">
             Recommended lane:{" "}
             <span className="font-semibold text-white">
               {profile?.movementPreferences
@@ -39,9 +39,6 @@ export default function LibraryPage() {
             key={exercise.id}
             className="panel relative overflow-hidden p-5 sm:p-6"
           >
-            <div
-              className={`absolute inset-x-0 top-0 h-40 bg-gradient-to-br ${exercise.heroTone}`}
-            />
             <div className="relative">
               <p className="chip">{exercise.tagline}</p>
               <h2 className="mt-5 font-display text-4xl font-semibold">
@@ -55,7 +52,7 @@ export default function LibraryPage() {
                 {exercise.focus.map((focus) => (
                   <div
                     key={focus}
-                    className={`rounded-[20px] border border-white/10 bg-gradient-to-r p-4 ${exercise.surfaceTone}`}
+                    className="rounded-lg border border-white/10 bg-white/[0.04] p-4"
                   >
                     <p className="text-sm text-white">{focus}</p>
                   </div>

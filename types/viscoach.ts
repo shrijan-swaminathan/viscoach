@@ -57,6 +57,4 @@ export interface ExerciseDefinition {
   focus: string[];
   tutorialVideo: ExerciseTutorialVideo;
   coachingHighlights: string[];
-  heroTone: string;
-  surfaceTone: string;
 }

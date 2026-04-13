@@ -4,15 +4,14 @@
 
 :root {
   color-scheme: dark;
-  --bg: #050807;
-  --panel: rgba(255, 255, 255, 0.05);
-  --panel-strong: rgba(255, 255, 255, 0.08);
-  --line: rgba(255, 255, 255, 0.12);
-  --text: #f6fff9;
-  --muted: rgba(217, 239, 228, 0.72);
-  --font-display: "Avenir Next Condensed", "Avenir Next", "Trebuchet MS",
-    sans-serif;
-  --font-copy: "Avenir Next", "Segoe UI", sans-serif;
+  --bg: #0e1015;
+  --panel: #171a21;
+  --panel-strong: #1f232c;
+  --line: #2a2f3a;
+  --text: #f4f4f5;
+  --muted: rgba(244, 244, 245, 0.68);
+  --font-display: "Space Grotesk", "Avenir Next", "Segoe UI", sans-serif;
+  --font-copy: "DM Sans", "Avenir Next", "Segoe UI", sans-serif;
   --font-mono: "SFMono-Regular", "Menlo", monospace;
 }
 
@@ -22,31 +21,18 @@ html {
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(201, 255, 67, 0.12), transparent 30%),
-    radial-gradient(circle at top right, rgba(255, 122, 26, 0.08), transparent 28%),
-    linear-gradient(180deg, #0a110d 0%, #050807 42%, #050807 100%);
+  background: var(--bg);
   color: var(--text);
   font-family: var(--font-copy);
 }
 
 body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgba(217, 239, 228, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(217, 239, 228, 0.05) 1px, transparent 1px);
-  background-position: center;
-  background-size: 56px 56px;
-  mask-image: radial-gradient(circle at center, black 35%, transparent 85%);
-  opacity: 0.22;
+  content: none;
 }
 
 ::selection {
-  background: rgba(201, 255, 67, 0.35);
-  color: #081108;
+  background: rgba(255, 220, 61, 0.45);
+  color: #0e1015;
 }
 
 @layer base {
@@ -55,7 +41,7 @@ body::before {
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
 
   code {
@@ -69,15 +55,15 @@ body::before {
   }
 
   .panel {
-    @apply rounded-[28px] border border-white/10 bg-white/[0.05] backdrop-blur-xl shadow-2xl shadow-black/20;
+    @apply rounded-lg border border-white/10 bg-carbon shadow-none;
   }
 
   .panel-subtle {
-    @apply rounded-[24px] border border-white/[0.08] bg-white/[0.03] backdrop-blur-md;
+    @apply rounded-lg border border-white/[0.08] bg-white/[0.04];
   }
 
   .eyebrow {
-    @apply text-[11px] font-semibold uppercase tracking-[0.32em] text-lime;
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-lime;
   }
 
   .headline {
@@ -89,15 +75,15 @@ body::before {
   }
 
   .button-primary {
-    @apply inline-flex items-center justify-center rounded-full bg-lime px-5 py-3 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:bg-lime/90;
+    @apply inline-flex items-center justify-center rounded-lg bg-lime px-5 py-3 text-sm font-semibold text-ink transition hover:bg-lime/90;
   }
 
   .button-secondary {
-    @apply inline-flex items-center justify-center rounded-full border border-white/[0.12] bg-white/[0.04] px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/[0.08];
+    @apply inline-flex items-center justify-center rounded-lg border border-white/[0.12] bg-transparent px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.08];
   }
 
   .chip {
-    @apply inline-flex items-center rounded-full border border-white/[0.12] bg-white/[0.06] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-mist/70;
+    @apply inline-flex items-center rounded-md border border-white/[0.12] bg-white/[0.05] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-mist/70;
   }
 
   .metric-value {
@@ -109,6 +95,6 @@ body::before {
   }
 
   .progress-fill {
-    @apply h-full rounded-full bg-gradient-to-r from-lime via-lime to-emerald-300;
+    @apply h-full rounded-full bg-lime;
   }
 }

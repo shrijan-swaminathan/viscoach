@@ -10,18 +10,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#050807",
-        carbon: "#0d1411",
-        lime: "#c9ff43",
-        ember: "#ff7a1a",
-        mist: "#d9efe4"
+        ink: "#0e1015",
+        carbon: "#171a21",
+        lime: "#ffdc3d",
+        ember: "#ffdc3d",
+        mist: "#f4f4f5"
       },
       boxShadow: {
-        glow: "0 0 40px rgba(201, 255, 67, 0.18)"
+        glow: "0 0 0 1px rgba(255, 220, 61, 0.35)"
       },
       backgroundImage: {
         "hero-grid":
-          "linear-gradient(to right, rgba(217,239,228,0.07) 1px, transparent 1px), linear-gradient(to bottom, rgba(217,239,228,0.07) 1px, transparent 1px)"
+          "none"
       }
     }
   },

@@ -31,12 +31,8 @@ export function CoachShell({ children }: { children: React.ReactNode }) {
               <div>
                 <p className="eyebrow">VisCoach</p>
                 <h1 className="font-display text-3xl font-semibold sm:text-4xl">
-                  Browser-first AI form coaching.
+                  A form coach in your pocket.
                 </h1>
-                <p className="mt-2 max-w-2xl text-sm leading-6 text-mist/75">
-                  Onboarding, movement selection, live camera feedback, and
-                  local progress tracking in one lightweight product flow.
-                </p>
               </div>
               <div className="flex flex-wrap gap-2">
                 {NAV_ITEMS.map((item) => {
@@ -45,7 +41,7 @@ export function CoachShell({ children }: { children: React.ReactNode }) {
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                      className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
                         isActive
                           ? "bg-lime text-ink"
                           : "border border-white/10 bg-white/[0.05] text-white hover:bg-white/[0.08]"
@@ -95,7 +91,7 @@ export function CoachShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <div className="mt-5 rounded-[24px] border border-white/10 bg-black/20 px-4 py-3 text-sm text-mist/70">
+          <div className="mt-5 rounded-lg border border-white/10 bg-black/20 px-4 py-3 text-sm text-mist/70">
             {profileSnapshot}
           </div>
         </header>

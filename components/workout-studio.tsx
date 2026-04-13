@@ -354,7 +354,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
           | undefined;
 
         context.clearRect(0, 0, canvas.width, canvas.height);
-        context.fillStyle = "rgba(10, 17, 13, 0.12)";
+        context.fillStyle = "rgba(14, 16, 21, 0.12)";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         if (landmarks) {
@@ -404,7 +404,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
     height: number
   ) {
     context.lineWidth = 5;
-    context.strokeStyle = "rgba(201, 255, 67, 0.9)";
+    context.strokeStyle = "rgba(255, 220, 61, 0.95)";
     context.lineCap = "round";
 
     for (const [start, end] of SKELETON_CONNECTIONS) {
@@ -422,7 +422,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
 
     for (const landmark of landmarks) {
       context.beginPath();
-      context.fillStyle = "rgba(255, 122, 26, 0.95)";
+      context.fillStyle = "rgba(255, 220, 61, 0.95)";
       context.arc(landmark.x * width, landmark.y * height, 5, 0, Math.PI * 2);
       context.fill();
     }
@@ -488,13 +488,13 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
               overlay.
             </p>
           </div>
-          <div className="rounded-[22px] border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-mist/70">
+          <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-mist/70">
             {statusMessage}
           </div>
         </div>
 
-        <div className="mt-5 overflow-hidden rounded-[28px] border border-white/10 bg-black/40">
-          <div className="relative aspect-[16/10] w-full bg-[radial-gradient(circle_at_top,_rgba(201,255,67,0.12),_transparent_45%),linear-gradient(180deg,_rgba(10,17,13,0.95),_rgba(5,8,7,1))]">
+        <div className="mt-5 overflow-hidden rounded-lg border border-white/10 bg-black/40">
+          <div className="relative aspect-[16/10] w-full bg-black">
             {isTutorialVisible ? (
               <>
                 <iframe
@@ -506,7 +506,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
                   referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/75 to-transparent">
+                <div className="absolute inset-x-0 bottom-0 bg-black/85">
                   <div className="p-5 sm:p-6">
                     <p className="eyebrow">Tutorial video</p>
                     <h2 className="mt-2 font-display text-3xl font-semibold text-white">
@@ -694,7 +694,7 @@ export function WorkoutStudio({ exercise }: { exercise: ExerciseDefinition }) {
             {exercise.focus.map((focus) => (
               <div
                 key={focus}
-                className="rounded-[18px] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-mist/75"
+                className="rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-mist/75"
               >
                 {focus}
               </div>

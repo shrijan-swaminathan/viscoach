@@ -57,9 +57,9 @@ export default function ProgressPage() {
             <div className="mt-6 flex items-end gap-3">
               {sessions.slice(0, 6).reverse().map((session) => (
                 <div key={session.id} className="flex flex-1 flex-col items-center gap-3">
-                  <div className="flex h-48 w-full items-end rounded-[18px] border border-white/10 bg-white/[0.03] p-2">
+                  <div className="flex h-48 w-full items-end rounded-lg border border-white/10 bg-white/[0.03] p-2">
                     <div
-                      className="w-full rounded-[12px] bg-gradient-to-t from-lime via-lime/90 to-emerald-200"
+                      className="w-full rounded-md bg-lime"
                       style={{
                         height: `${Math.max(16, (session.avgFormScore / maxScore) * 100)}%`
                       }}
@@ -72,7 +72,7 @@ export default function ProgressPage() {
               ))}
             </div>
           ) : (
-            <div className="mt-4 rounded-[24px] border border-dashed border-white/[0.15] px-5 py-8 text-sm text-mist/65">
+            <div className="mt-4 rounded-lg border border-dashed border-white/[0.15] px-5 py-8 text-sm text-mist/65">
               No session data yet. Start one from the library to generate the first
               metrics.
             </div>
@@ -88,7 +88,7 @@ export default function ProgressPage() {
               {sessions.map((session) => (
                 <div
                   key={session.id}
-                  className="rounded-[24px] border border-white/10 bg-white/[0.03] p-5"
+                  className="rounded-lg border border-white/10 bg-white/[0.03] p-5"
                 >
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
@@ -110,7 +110,7 @@ export default function ProgressPage() {
                     ].map((item) => (
                       <div
                         key={item}
-                        className="rounded-[18px] border border-white/10 bg-black/20 px-3 py-4 text-center text-sm text-white"
+                        className="rounded-lg border border-white/10 bg-black/20 px-3 py-4 text-center text-sm text-white"
                       >
                         {item}
                       </div>
@@ -120,7 +120,7 @@ export default function ProgressPage() {
               ))}
             </div>
           ) : (
-            <div className="mt-4 rounded-[24px] border border-dashed border-white/[0.15] px-5 py-8 text-sm text-mist/65">
+            <div className="mt-4 rounded-lg border border-dashed border-white/[0.15] px-5 py-8 text-sm text-mist/65">
               Nothing saved yet. The progress screen will populate after the first
               workout ends.
             </div>

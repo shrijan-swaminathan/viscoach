@@ -157,9 +157,9 @@ function ToggleCard({
     <button
       type="button"
       onClick={onClick}
-      className={`w-full rounded-[24px] border p-4 text-left transition ${
+      className={`w-full rounded-lg border p-4 text-left transition ${
         active
-          ? "border-lime bg-lime/[0.08] shadow-glow"
+          ? "border-lime bg-lime/[0.08]"
           : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:bg-white/[0.05]"
       }`}
     >
@@ -246,7 +246,6 @@ export function OnboardingFlow() {
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-5xl items-center px-4 py-6 sm:px-6 lg:px-8">
       <section className="panel relative w-full overflow-hidden p-6 sm:p-8">
-        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-br from-lime/15 via-transparent to-transparent" />
         <div className="relative">
           <div className="flex flex-col gap-6">
             <div className="flex flex-wrap items-start justify-between gap-4">
@@ -259,12 +258,12 @@ export function OnboardingFlow() {
                   Move from setup to first workout in a short, guided flow.
                 </p>
               </div>
-              <div className="rounded-full border border-white/10 bg-white/[0.03] px-4 py-2 text-xs uppercase tracking-[0.24em] text-mist/60">
+              <div className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-2 text-xs uppercase tracking-[0.18em] text-mist/60">
                 Step {step + 1} / {totalSteps}
               </div>
             </div>
 
-            <div className="rounded-[28px] border border-white/10 bg-black/20 p-5 sm:p-6">
+            <div className="rounded-lg border border-white/10 bg-black/20 p-5 sm:p-6">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-xs uppercase tracking-[0.24em] text-mist/55">
@@ -277,7 +276,7 @@ export function OnboardingFlow() {
                     {currentStep.description}
                   </p>
                 </div>
-                <div className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white">
+                <div className="rounded-lg border border-white/10 bg-white/[0.04] px-4 py-2 text-sm font-semibold text-white">
                   {Math.round(progress)}% complete
                 </div>
               </div>
@@ -342,7 +341,7 @@ export function OnboardingFlow() {
                       session.
                     </p>
                   </div>
-                  <div className="rounded-[26px] border border-lime/20 bg-black/25 p-5">
+                  <div className="rounded-lg border border-lime/20 bg-black/25 p-5">
                     <p className="text-sm leading-6 text-mist/75">
                       The experience is intentionally focused: guided onboarding,
                       three supported exercises, a live pose overlay, and short
@@ -371,7 +370,7 @@ export function OnboardingFlow() {
                   ].map((item, index) => (
                     <div
                       key={item.title}
-                      className={`rounded-[24px] border p-5 ${
+                      className={`rounded-lg border p-5 ${
                         index === 1
                           ? "border-lime/30 bg-lime/[0.08]"
                           : "border-white/10 bg-white/[0.03]"
@@ -472,7 +471,7 @@ export function OnboardingFlow() {
                     ].map((item) => (
                       <div
                         key={item}
-                        className="rounded-[20px] border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-mist/75"
+                        className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-sm text-mist/75"
                       >
                         {item}
                       </div>
@@ -482,9 +481,9 @@ export function OnboardingFlow() {
                 <button
                   type="button"
                   onClick={() => setPrivacyAccepted((current) => !current)}
-                  className={`rounded-[28px] border p-6 text-left transition ${
+                  className={`rounded-lg border p-6 text-left transition ${
                     privacyAccepted
-                      ? "border-lime bg-lime/[0.08] shadow-glow"
+                      ? "border-lime bg-lime/[0.08]"
                       : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]"
                   }`}
                 >

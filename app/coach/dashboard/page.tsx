@@ -36,16 +36,11 @@ export default function DashboardPage() {
   return (
     <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
       <section className="panel overflow-hidden p-6 sm:p-8">
-        <div className="absolute inset-0 hidden bg-gradient-to-br from-lime/10 via-transparent to-transparent lg:block" />
         <div className="relative">
           <p className="eyebrow">Dashboard</p>
           <h1 className="mt-3 font-display text-5xl font-semibold leading-none">
             Ready for your next form check.
           </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-mist/75">
-            This dashboard keeps you oriented, recommends the next session, and
-            surfaces local progress without requiring a backend.
-          </p>
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[
@@ -81,7 +76,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="mt-8 grid gap-4 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="rounded-[30px] border border-lime/20 bg-gradient-to-br from-lime/[0.14] via-lime/[0.05] to-transparent p-6">
+            <div className="rounded-lg border border-lime/25 bg-lime/[0.08] p-6">
               <p className="chip">Recommended next move</p>
               <h2 className="mt-4 font-display text-4xl font-semibold">
                 {recommendedExercise?.name ?? "Velocity Squat"}
@@ -155,7 +150,7 @@ export default function DashboardPage() {
         <div className="panel p-5">
           <p className="eyebrow">Latest session</p>
           {latestSession ? (
-            <div className="mt-4 rounded-[24px] border border-white/10 bg-white/[0.03] p-5">
+            <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.03] p-5">
               <p className="font-display text-3xl font-semibold text-white">
                 {latestSession.exerciseName}
               </p>
@@ -170,7 +165,7 @@ export default function DashboardPage() {
                 ].map((item) => (
                   <div
                     key={item}
-                    className="rounded-[18px] border border-white/10 bg-black/20 px-3 py-4 text-center text-sm text-white"
+                    className="rounded-lg border border-white/10 bg-black/20 px-3 py-4 text-center text-sm text-white"
                   >
                     {item}
                   </div>
@@ -178,7 +173,7 @@ export default function DashboardPage() {
               </div>
             </div>
           ) : (
-            <div className="mt-4 rounded-[24px] border border-dashed border-white/[0.15] px-5 py-8 text-sm text-mist/65">
+            <div className="mt-4 rounded-lg border border-dashed border-white/[0.15] px-5 py-8 text-sm text-mist/65">
               No saved session yet. Start in the exercise library and the dashboard
               will begin filling itself in.
             </div>

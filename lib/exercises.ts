@@ -16,9 +16,7 @@ export const EXERCISES: ExerciseDefinition[] = [
       embedUrl: "https://www.youtube-nocookie.com/embed/-W19J4VR7D0",
       watchUrl: "https://www.youtube.com/watch?v=-W19J4VR7D0"
     },
-    coachingHighlights: ["Lower your hips.", "Keep chest up."],
-    heroTone: "from-lime/30 via-lime/10 to-transparent",
-    surfaceTone: "from-lime/15 via-transparent to-emerald-500/10"
+    coachingHighlights: ["Lower your hips.", "Keep chest up."]
   },
   {
     id: "pushup",
@@ -35,9 +33,7 @@ export const EXERCISES: ExerciseDefinition[] = [
       embedUrl: "https://www.youtube-nocookie.com/embed/-WXc4E-zcao",
       watchUrl: "https://www.youtube.com/watch?v=-WXc4E-zcao"
     },
-    coachingHighlights: ["Back is straight.", "Hips sagging."],
-    heroTone: "from-orange-500/25 via-orange-500/10 to-transparent",
-    surfaceTone: "from-orange-500/15 via-transparent to-rose-500/10"
+    coachingHighlights: ["Back is straight.", "Hips sagging."]
   },
   {
     id: "lunge",
@@ -54,9 +50,7 @@ export const EXERCISES: ExerciseDefinition[] = [
       embedUrl: "https://www.youtube-nocookie.com/embed/3KBAEzNJckY",
       watchUrl: "https://www.youtube.com/watch?v=3KBAEzNJckY"
     },
-    coachingHighlights: ["Front knee too far forward.", "Sink lower into the lunge."],
-    heroTone: "from-sky-400/25 via-cyan-400/10 to-transparent",
-    surfaceTone: "from-sky-400/15 via-transparent to-teal-500/10"
+    coachingHighlights: ["Front knee too far forward.", "Sink lower into the lunge."]
   }
 ];
 
